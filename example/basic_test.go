@@ -15,15 +15,33 @@ func TestTruth(t *testing.T) {
 			When:  "they are compared",
 			Then: test.Then{
 				"true should not be  equal to %v": {
-					Got:    true == false,
+					Got:    true,
+					Assert: it.ShouldNotEqual,
+					Wants:  false,
+					Format: true,
+				},
+				"true should be  equal to %v": {
+					Got:    true,
+					Assert: it.ShouldEqual,
+					Wants:  true,
+					Format: true,
+				},
+			},
+		},
+		{
+			Given: "a false and true value",
+			When:  "they are compared",
+			Then: test.Then{
+				"false should not be  equal to %v": {
+					Got:    false,
 					Assert: it.ShouldNotEqual,
 					Wants:  true,
 					Format: true,
 				},
-				"true should be  equal to %v": {
-					Got:    true == true,
+				"false should be  equal to %v": {
+					Got:    false,
 					Assert: it.ShouldEqual,
-					Wants:  true,
+					Wants:  false,
 					Format: true,
 				},
 			},

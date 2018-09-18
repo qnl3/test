@@ -1,19 +1,20 @@
-package example
+package test
 
 import (
 	"testing"
 
-	"github.com/qnl3/test"
+	//"github.com/qnl3/test" // dont import your self
+
 	it "github.com/smartystreets/goconvey/convey"
 )
 
 func TestTruth(t *testing.T) {
 
-	tests := test.Tests{
+	tests := Tests{
 		{
 			Given: "a true and false value",
 			When:  "they are compared",
-			Then: test.Then{
+			Then: Then{
 				"true should not be  equal to %v": {
 					Got:    true,
 					Assert: it.ShouldNotEqual,
@@ -31,7 +32,7 @@ func TestTruth(t *testing.T) {
 		{
 			Given: "a false and true value",
 			When:  "they are compared",
-			Then: test.Then{
+			Then: Then{
 				"false should not be  equal to %v": {
 					Got:    false,
 					Assert: it.ShouldNotEqual,
@@ -48,5 +49,33 @@ func TestTruth(t *testing.T) {
 		},
 	}
 
-	test.RunTests(tests, t)
+	RunTests(tests, t)
+}
+
+func TestSingleValueAssertions(t *testing.T) {
+
+	tests := Tests{
+		{
+			Given: "a nil value",
+			When:  "i assert it.ShouldBeNil",
+			Then: Then{
+				"it should pass": {
+					Got:    nil,
+					Assert: it.ShouldBeNil,
+				},
+			},
+		},
+		{
+			Given: "a non nil value",
+			When:  "i assert it.ShouldNotBeNil",
+			Then: Then{
+				"it should pass": {
+					Got:    "not nil",
+					Assert: it.ShouldNotBeNil,
+				},
+			},
+		},
+	}
+
+	RunTests(tests, t)
 }

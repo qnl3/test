@@ -1,4 +1,4 @@
-package example
+package interface_tests
 
 import (
 	"testing"
@@ -43,6 +43,34 @@ func TestTruth(t *testing.T) {
 					Assert: it.ShouldEqual,
 					Wants:  false,
 					Format: true,
+				},
+			},
+		},
+	}
+
+	test.RunTests(tests, t)
+}
+
+func TestSingleValueAssertions(t *testing.T) {
+
+	tests := test.Tests{
+		{
+			Given: "a nil value",
+			When:  "i assert it.ShouldBeNil",
+			Then: test.Then{
+				"it should pass": {
+					Got:    nil,
+					Assert: it.ShouldBeNil,
+				},
+			},
+		},
+		{
+			Given: "a non nil value",
+			When:  "i assert it.ShouldNotBeNil",
+			Then: test.Then{
+				"it should pass": {
+					Got:    "not nil",
+					Assert: it.ShouldNotBeNil,
 				},
 			},
 		},

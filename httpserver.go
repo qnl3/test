@@ -9,9 +9,12 @@ import (
 )
 
 // RunOneShotHTTPServer executes an http server and serves on localhost at
-// the specified port using the provided handlefunc. The server will exit after
-// one request or when the timeout expires which ever occures first.
-func RunOneShotHTTPServer(port int, timeout time.Duration, handler http.HandlerFunc) {
+// the specified port using the provided handlefunc. 'path' is the
+// absolute path on the server where the handler will be maped, usually "/".The
+// server will exit after one request or when the timeout expires which ever
+// occures first. There is also a shutdown  path at /api/killserver that
+// will stop the server when it recieves a GET request.
+func RunOneShotHTTPServer(port int, timeout time.Duration, path string, handler http.HandlerFunc) {
 	mux := http.NewServeMux()
 	idleConnsClosed := make(chan struct{})
 
@@ -20,7 +23,7 @@ func RunOneShotHTTPServer(port int, timeout time.Duration, handler http.HandlerF
 		close(idleConnsClosed)
 	})
 
-	mux.HandleFunc("/api/project_analyses/search", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Fprintf(w, reply)
 		handler(w, r)
 		close(idleConnsClosed)

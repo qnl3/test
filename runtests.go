@@ -19,19 +19,24 @@ func RunTests(tests Tests, t *testing.T) {
 		convey.Convey(fmt.Sprintf("Given %s", tdd.Given), t, func() {
 			convey.Convey(fmt.Sprintf("When %s", tdd.When), func() {
 
-				thenPrefix := "Then"
-
 				for thenTestKey, thenTest := range tdd.Then {
 					// format then statement if Format is true
 					var thenString string
+
 					if thenTest.Format {
+						var formatParameter interface{}
+						if thenTest.Wants != nil {
+							formatParameter = thenTest.Wants
+						} else {
+							formatParameter = thenTest.Got
+						}
 						thenString = fmt.Sprintf(
 							"%s %s",
-							thenPrefix,
-							fmt.Sprintf(thenTestKey, thenTest.Wants),
+							"Then",
+							fmt.Sprintf(thenTestKey, formatParameter),
 						)
 					} else {
-						thenString = thenTestKey
+						thenString = fmt.Sprintf("Then %s", thenTestKey)
 					}
 					// execute then setup
 					if thenTest.Setup != nil {
@@ -39,7 +44,11 @@ func RunTests(tests Tests, t *testing.T) {
 					}
 
 					convey.Convey(thenString, func() {
-						convey.So(thenTest.Got, thenTest.Assert, thenTest.Wants)
+						if thenTest.Wants != nil {
+							convey.So(thenTest.Got, thenTest.Assert, thenTest.Wants)
+						} else {
+							convey.So(thenTest.Got, thenTest.Assert)
+						}
 					})
 
 					//excute the teardown
@@ -47,10 +56,11 @@ func RunTests(tests Tests, t *testing.T) {
 						thenTest.TearDown()
 					}
 
-					// change prefix to And after first test
+					/* change prefix to And after first test
 					if thenPrefix != "And" {
 						thenPrefix = "And"
 					}
+					*/
 				}
 			})
 		})

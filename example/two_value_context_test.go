@@ -36,9 +36,7 @@ func TestTwoValueExample(t *testing.T) {
 							return true, nil
 						}(),
 					),
-					Assert: it.ShouldHaveSameTypeAs,
-					Wants:  nil,
-					Format: false,
+					Assert: it.ShouldBeNil,
 				},
 			},
 		},
